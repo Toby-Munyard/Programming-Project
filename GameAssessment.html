@@ -1,6 +1,6 @@
 <!doctype html>
 <body>
-    <canvas id="gameCanvas" width="1600" height="1000"></canvas>
+    <canvas id="gameCanvas" width="1000" height="800"></canvas>
     <script>
         var canvas, canvasContext;
     
@@ -17,9 +17,9 @@
         //player vars
         var PlayerXpos = 0;
         var PlayerYpos = 0;
-        const PLAYER_SIZE = 20;
-        var PlayerXspeed = 5;
-        var PlayerYspeed = 5;
+        const PLAYER_SIZE = 60;
+        var PlayerXspeed = 10;
+        var PlayerYspeed = 10;
     
         var leftKeyPressed = false;
         var rightKeyPressed = false;
@@ -32,8 +32,11 @@
         const DOWN_KEY = 40;
         
         function mainloop() {
-            colorRect(0,0,canvas.width,canvas.height,'black'); // bg 
+            colorRect(0,0,canvas.width,canvas.height,'black'); // bg
+            colorRect(0,600,1000,800,'grey')
             colorRect(PlayerXpos,PlayerYpos,PLAYER_SIZE,PLAYER_SIZE,'red'); //player
+            
+            PlayerMove();
         } // end func
         
         
@@ -69,8 +72,8 @@
         function PlayerMove() {
             if(rightKeyPressed){
                 PlayerXpos += PlayerXspeed;
-            if(PlayerXpos = canvas.width - PLAYER_SIZE){
-                PlayerXpos -= PlayerXspeed;
+                if (PlayerXpos < 0 + PLAYER_SIZE){
+                    PlayerXpos = canvas.width + PLAYER_SIZE;
                 }
             }
             if(leftKeyPressed){
@@ -81,9 +84,15 @@
             }
             if(upKeyPressed){
                 PlayerYpos -= PlayerYspeed;
+                if (PlayerYpos < 0 - PLAYER_SIZE){
+                    PlayerYpos = canvas.height - PLAYER_SIZE;
+                }
             }
             if(downKeyPressed){
                 PlayerYpos += PlayerYspeed;
+                if (PlayerYpos < canvas.height + PLAYER_SIZE){
+                    PlayerYpos = canvas.height + PLAYER_SIZE;
+                }
             }
         }
         function colorRect(x,y,w,h,c){
