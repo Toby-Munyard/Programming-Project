@@ -72,8 +72,8 @@
         function PlayerMove() {
             if(rightKeyPressed){
                 PlayerXpos += PlayerXspeed;
-                if (PlayerXpos < 0 + PLAYER_SIZE){
-                    PlayerXpos = canvas.width + PLAYER_SIZE;
+                if (PlayerXpos > canvas.width){
+                    PlayerXpos = 0;
                 }
             }
             if(leftKeyPressed){
@@ -90,8 +90,8 @@
             }
             if(downKeyPressed){
                 PlayerYpos += PlayerYspeed;
-                if (PlayerYpos < canvas.height + PLAYER_SIZE){
-                    PlayerYpos = canvas.height + PLAYER_SIZE;
+                if (PlayerYpos > canvas.width){
+                    PlayerYpos = 0;
                 }
             }
         }
