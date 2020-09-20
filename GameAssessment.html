@@ -22,6 +22,12 @@
         var PlayerXspeed = 10;
         var PlayerYspeed = 10;
 
+        //Background vars
+        var backgroundheight = 1515;
+        var backgroundwidth = 800;
+        var background = new Image();
+        background.scr = 'Background/Zelda.png';
+
         //movement vars
         var leftKeyPressed = false;
         var rightKeyPressed = false;
@@ -44,13 +50,14 @@
         var Timer = 60;
 
         function mainloop() {
-            colorRect(0, 0, canvas.width, canvas.height, 'black'); // bg
-            colorRect(0, 600, 1000, 800, 'grey')
+            drawImgs(background, 0, 0, backgroundwidth, backgroundheight);
+            colorRect(0, 0, canvas.width, canvas.height, 'white'); // bg
+            colorRect(0, 600, canvas.width, canvas.height, 'grey')
             colorRect(PlayerXpos, PlayerYpos, PLAYER_SIZE, PLAYER_SIZE, 'red'); //player
 
             if (settingUp) {
                 for (var i = 0; i < totalEnemys; i++) {
-                    setUp();
+                    setUp();         
                 }
                 settingUp = false;
             }
@@ -174,6 +181,10 @@
                 }
             });
         } //end func
+
+        function drawImgs(src, x, y, w, h) {
+            canvasContext.drawImage(src, x, y, w, h);
+        }
 
         function GameOver() {
             if (Health > 0) {
