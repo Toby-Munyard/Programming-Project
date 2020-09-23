@@ -21,12 +21,14 @@
         const PLAYER_SIZE = 60;
         var PlayerXspeed = 10;
         var PlayerYspeed = 10;
+        var ship = new Image();
+        ship.src = 'images/Ship.png'
 
         //Background vars
-        var backgroundheight = 1515;
-        var backgroundwidth = 800;
+        var backgroundheight = 800;
+        var backgroundwidth = 1000;
         var background = new Image();
-        background.scr = 'Background/Zelda.png';
+        background.src = 'images/Background.jpg';
 
         //movement vars
         var leftKeyPressed = false;
@@ -43,21 +45,22 @@
         var Enemys = [];
         var settingUp = true;
         var totalEnemys = 10;
-
+        var enemysprite = new Image();
+        enemysprite.src = 'images/enemy.png'
+        
         //scoring vars
         var Health = 3;
         var Kills = 0;
         var Timer = 60;
 
         function mainloop() {
-            drawImgs(background, 0, 0, backgroundwidth, backgroundheight);
-            colorRect(0, 0, canvas.width, canvas.height, 'white'); // bg
-            colorRect(0, 600, canvas.width, canvas.height, 'grey')
-            colorRect(PlayerXpos, PlayerYpos, PLAYER_SIZE, PLAYER_SIZE, 'red'); //player
+            drawImg(background, 0, 0, backgroundwidth, backgroundheight);//bg
+            drawImg(ship, PlayerXpos, PlayerYpos, 60, 90); //player
+            drawImg(enemysprite, EnemyXpos ,EnemyYpos ,100 ,50);//enemy
 
             if (settingUp) {
                 for (var i = 0; i < totalEnemys; i++) {
-                    setUp();         
+                    setUp();
                 }
                 settingUp = false;
             }
@@ -142,13 +145,13 @@
         } // end func 
         function DrawEnemys() {
             Enemys.forEach(function(Enemy, i) {
-                colorRect(Enemy.EnemyXpos, Enemy.EnemyYpos, Enemy.EnemySize, Enemy.EnemySize, 'cyan');
+                colorRect(Enemy.EnemyXpos, Enemy.EnemyYpos, Enemy.EnemySize, Enemy.EnemySize, 'purple');
             });
-        }
+        }; // end func
 
         function EnemyRandomSpawns() {
             math.random() * canvas.width
-        };
+        }; // end func
 
         function moveEnemys() {
             Enemys.forEach(function(Enemy, i) {
@@ -174,24 +177,23 @@
 
                 }
                 if (Enemy.EnemyYpos + Enemy.EnemySize > PlayerYpos && Enemy.EnemyYpos < PlayerYpos + PLAYER_SIZE && Enemy.EnemyXpos + Enemy.EnemySize > PlayerXpos && Enemy.EnemyXpos < PlayerXpos + PLAYER_SIZE) {
-                    PlayerXpos = 100;
-                    PlayerYpos = canvas.height - PLAYER_SIZE;
+                    PlayerXpos = 500;
+                    PlayerYpos = 400;
                     Health--;
                     console.log('Health:' + Health);
                 }
             });
         } //end func
 
-        function drawImgs(src, x, y, w, h) {
+        function drawImg(src, x, y, w, h) {
             canvasContext.drawImage(src, x, y, w, h);
-        }
+        } // end func
 
         function GameOver() {
-            if (Health > 0) {
-                PlayerXpos = 0;
-                PlayerYpos = canvas.height - PLAYER_SIZE;
+            if (Health < 1) {
+                PlayerXpos = 400;
             }
-        }
+        } // end func
 
         function colorRect(x, y, w, h, c) {
             canvasContext.fillStyle = c;
