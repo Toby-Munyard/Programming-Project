@@ -44,31 +44,25 @@
         //enemy vars
         var Enemys = [];
         var settingUp = true;
-        var totalEnemys = 10;
+        var totalEnemys = 15;
         var enemysprite = new Image();
-        enemysprite.src = 'images/enemy.png'
+        enemysprite.src = 'images/enemy.png';
+        
+        //health
+        var pickups = [];
+        var settingup = true;
+        var totalpickup = 2;
+        var pickupSprite = new Image();
+        pickupSprite.src = 'images/pickup.png';
         
         //scoring vars
-        var Health = 3;
+        var Health = 5;
         var Kills = 0;
         var Timer = 60;
-
-        function mainloop() {
-            drawImg(background, 0, 0, backgroundwidth, backgroundheight);//bg
-            drawImg(ship, PlayerXpos, PlayerYpos, 60, 90); //player
-            drawImg(enemysprite, EnemyXpos ,EnemyYpos ,100 ,50);//enemy
-
-            if (settingUp) {
-                for (var i = 0; i < totalEnemys; i++) {
-                    setUp();
-                }
-                settingUp = false;
-            }
-            PlayerMove();
-            DrawEnemys();
-            moveEnemys();
-        } // end func
-
+        
+        //bullet vars
+        var bullet = new Image();
+        bullet.src = 'images/bullet.png';
 
         function KeyPressed(evt) {
             if (evt.keyCode == LEFT_KEY) { //left
@@ -139,13 +133,48 @@
                 EnemyXspeed: EnemyXspeed,
                 EnemyYspeed: EnemyYspeed,
             }
-
+            
             Enemys.push(Enemy);
 
-        } // end func 
+        } // end func
+        
+        function createPickUp(){
+            var PickupSize = Math.floor(Math.random() * (100 - 10)) + 10;
+            var PickupXpos = Math.floor(Math.random() * ((canvas.width - PickupSize) - 0)) + 0;
+            var PickupYpos = Math.floor(Math.random() * ((canvas.height - PickupSize) - 0)) + 0;
+            
+            var p = {
+                PickupXpos: PickupXpos,
+                PickupYpos: PickupYpos,
+                PickupSize: PickupSize,
+            }
+
+            pickups.push(p);
+            
+        }
+        
+        var counter = 0;
+        var randTime = Math.floor(Math.random()*100);
+        
+        function pickUpGen(){
+            counter++; 
+            
+            if(counter == randTime){
+               createPickUp();
+               randTime = Math.floor(Math.random()*100); 
+                counter = 0;
+                console.log('health')
+            }
+        }
+        
+        function DrawPickups() {
+            pickups.forEach(function(health, i) {
+                drawImg(pickupSprite, health.PickupXpos ,health.PickupYpos,health.PickupSize ,health.PickupSize );
+            });
+        }; // end func
         function DrawEnemys() {
             Enemys.forEach(function(Enemy, i) {
-                colorRect(Enemy.EnemyXpos, Enemy.EnemyYpos, Enemy.EnemySize, Enemy.EnemySize, 'purple');
+                drawImg(enemysprite, Enemy.EnemyXpos ,Enemy.EnemyYpos,Enemy.EnemySize ,Enemy.EnemySize);
             });
         }; // end func
 
@@ -194,6 +223,24 @@
                 PlayerXpos = 400;
             }
         } // end func
+        function mainloop() {
+            drawImg(background, 0, 0, backgroundwidth, backgroundheight);//bg
+            drawImg(ship, PlayerXpos, PlayerYpos, 60, 90); //player
+            drawImg(enemysprite, 0 ,0,0 ,0);//enemy
+            drawImg(pickupSprite,100,100,50,50);//healthpickup
+            pickUpGen();
+            
+            if (settingUp) {
+                for (var i = 0; i < totalEnemys; i++) {
+                    setUp();
+                }
+                settingUp = false;
+            }
+            PlayerMove();
+            DrawEnemys();
+            moveEnemys();
+        }
+
 
         function colorRect(x, y, w, h, c) {
             canvasContext.fillStyle = c;
