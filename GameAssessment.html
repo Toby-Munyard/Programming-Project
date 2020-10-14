@@ -200,14 +200,16 @@
 
                 if (Enemy.EnemyYpos > canvas.height) {
                     Enemy.EnemyYpos = 0 - Enemy.EnemySize;
-                    Enemy.EnemySize = Math.floor(Math.random() * (80 - 20)) + 10;
+                    Enemy.EnemySize = Math.floor(Math.random() * (80 - 10)) + 10;
                     Enemy.EnemyYspeed = Math.floor(Math.random() * (10 - 1)) + 1;
                     Enemy.EnemyXspeed = Math.floor(Math.random() * (10 - 1)) + 1;
 
                 }
                 if (Enemy.EnemyYpos + Enemy.EnemySize > PlayerYpos && Enemy.EnemyYpos < PlayerYpos + PLAYER_SIZE && Enemy.EnemyXpos + Enemy.EnemySize > PlayerXpos && Enemy.EnemyXpos < PlayerXpos + PLAYER_SIZE) {
-                    PlayerXpos = 500;
-                    PlayerYpos = 400;
+                    Enemy.EnemyXpos = 0;
+                    Enemy.EnemyYpos = 0;
+                    PlayerXpos = canvas.width / 2 - PLAYER_SIZE / 2;
+                    PlayerYpos = canvas.height * .8;
                     Health--;
                     console.log('Health:' + Health);
                 }
@@ -227,8 +229,9 @@
             drawImg(background, 0, 0, backgroundwidth, backgroundheight);//bg
             drawImg(ship, PlayerXpos, PlayerYpos, 60, 90); //player
             drawImg(enemysprite, 0 ,0,0 ,0);//enemy
-            drawImg(pickupSprite,100,100,50,50);//healthpickup
+//            drawImg(pickupSprite,100,100,50,50);//healthpickup
             pickUpGen();
+            DrawPickups();
             
             if (settingUp) {
                 for (var i = 0; i < totalEnemys; i++) {
