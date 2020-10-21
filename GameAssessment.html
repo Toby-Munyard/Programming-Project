@@ -12,7 +12,7 @@
             document.addEventListener('keydown', KeyPressed);
             document.addEventListener('keyup', KeyReleased);
 
-            setInterval(mainloop, 1000 / 50);
+            setInterval(mainloop, 1000 / gameSpeed);
         }
 
         //player vars
@@ -30,7 +30,7 @@
         var background = new Image();
         background.src = 'images/Background.jpg';
 
-        //movement vars
+        //control vars
         var leftKeyPressed = false;
         var rightKeyPressed = false;
         var upKeyPressed = false;
@@ -40,30 +40,52 @@
         const UP_KEY = 38;
         const RIGHT_KEY = 39;
         const DOWN_KEY = 40;
+        const SPACE_KEY = 32;
 
         //enemy vars
         var Enemys = [];
         var settingUp = true;
-        var totalEnemys = 15;
+        var totalEnemys = 10;
         var enemysprite = new Image();
         enemysprite.src = 'images/enemy.png';
-        
+
         //health
         var pickups = [];
         var settingup = true;
         var totalpickup = 2;
         var pickupSprite = new Image();
         pickupSprite.src = 'images/pickup.png';
-        
+
         //scoring vars
         var Health = 5;
         var Kills = 0;
         var Timer = 60;
-        
+
         //bullet vars
+        var bulletXpos = 0;
+        var bulletYpos = 0;
+        const BULLET_WIDTH = 60;
+        const BULLET_HEIGHT = 60;
+        var bulletYspeed = 10;
         var bullet = new Image();
         bullet.src = 'images/bullet.png';
 
+        var userName = '';
+        
+        while(userName == '' || userName == null){
+            userName = prompt('what is your name?');
+        }
+        
+        var difficulty = prompt('how hard do you want it?','easy');
+        
+        difficulty = Number(difficulty) // makes a number
+        var gameSpeed = 0;
+        
+        if(difficulty == 1){
+            gameSpeed = 2
+        } else {
+            gameSpeed = 30;
+        }
         function KeyPressed(evt) {
             if (evt.keyCode == LEFT_KEY) { //left
                 leftKeyPressed = true;
@@ -76,6 +98,9 @@
             }
             if (evt.keyCode == DOWN_KEY) { // down
                 downKeyPressed = true;
+            }
+            if (evt.keyCode == SPACE_KEY) { // space
+                shooting = true;
             }
         } // end func
 
@@ -93,6 +118,22 @@
                 downKeyPressed = false;
             }
         } // end func
+
+        var shooting = false;
+        var shot = false;
+
+        function bulletShoot() {
+            if (shooting && shot == false) {
+                bulletXpos = PlayerXpos + PLAYER_SIZE / 2 - BULLET_WIDTH / 2; // x center
+                bulletYpos = PlayerYpos;
+                shot = true;
+            }
+            if (shooting && shot) {
+                bulletYpos -= bulletYspeed;
+            }
+            
+        }// end func
+
         function PlayerMove() {
             if (rightKeyPressed) {
                 PlayerXpos += PlayerXspeed;
@@ -119,6 +160,7 @@
                 }
             }
         } // end func
+
         function setUp() {
             var EnemySize = Math.floor(Math.random() * (100 - 10)) + 10;
             var EnemyXpos = Math.floor(Math.random() * ((canvas.width - EnemySize) - 0)) + 0;
@@ -133,16 +175,16 @@
                 EnemyXspeed: EnemyXspeed,
                 EnemyYspeed: EnemyYspeed,
             }
-            
+
             Enemys.push(Enemy);
 
         } // end func
-        
-        function createPickUp(){
+
+        function createPickUp() {
             var PickupSize = Math.floor(Math.random() * (100 - 10)) + 10;
             var PickupXpos = Math.floor(Math.random() * ((canvas.width - PickupSize) - 0)) + 0;
             var PickupYpos = Math.floor(Math.random() * ((canvas.height - PickupSize) - 0)) + 0;
-            
+
             var p = {
                 PickupXpos: PickupXpos,
                 PickupYpos: PickupYpos,
@@ -150,31 +192,37 @@
             }
 
             pickups.push(p);
-            
-        }
-        
+
+        } //end func
+
         var counter = 0;
-        var randTime = Math.floor(Math.random()*100);
-        
-        function pickUpGen(){
-            counter++; 
-            
-            if(counter == randTime){
-               createPickUp();
-               randTime = Math.floor(Math.random()*100); 
+        var randTime = Math.floor(Math.random() * 100);
+
+        function pickUpGen() {
+            counter++;
+
+            if (counter == randTime) {
+                createPickUp();
+                randTime = Math.floor(Math.random() * 100);
                 counter = 0;
                 console.log('health')
             }
-        }
-        
+        } // end func
+
         function DrawPickups() {
             pickups.forEach(function(health, i) {
-                drawImg(pickupSprite, health.PickupXpos ,health.PickupYpos,health.PickupSize ,health.PickupSize );
+                drawImg(pickupSprite, health.PickupXpos, health.PickupYpos, health.PickupSize, health.PickupSize);
+
+                if (health.PickupYpos + health.PickupSize > PlayerYpos && health.PickupYpos < PlayerYpos + PLAYER_SIZE && health.PickupXpos + health.PickupSize > PlayerXpos && health.PickupXpos < PlayerXpos + PLAYER_SIZE) {
+                    health.PickupXpos = 10000;
+                    health.PickupYpos = 10000;
+                    Health++;
+                }
             });
         }; // end func
         function DrawEnemys() {
             Enemys.forEach(function(Enemy, i) {
-                drawImg(enemysprite, Enemy.EnemyXpos ,Enemy.EnemyYpos,Enemy.EnemySize ,Enemy.EnemySize);
+                drawImg(enemysprite, Enemy.EnemyXpos, Enemy.EnemyYpos, Enemy.EnemySize, Enemy.EnemySize);
             });
         }; // end func
 
@@ -213,6 +261,15 @@
                     Health--;
                     console.log('Health:' + Health);
                 }
+                
+                if (bulletYpos < 0 || bulletXpos + BULLET_WIDTH > Enemys.EnemyXpos && bulletXpos < Enemys.EnemyXpos + Enemys.EnemySize && bulletYpos + BULLET_HEIGHT > Enemys.EnemyYpos && bulletYpos < Enemys.EnemyYpos + Enemys.EnemySize) {
+                shot = false;
+                shooting = false;
+            }
+            if (shot == false && shooting == false) {
+                bulletXpos = 0 - BULLET_WIDTH;
+                bulletYpos = 0;
+            }
             });
         } //end func
 
@@ -226,13 +283,14 @@
             }
         } // end func
         function mainloop() {
-            drawImg(background, 0, 0, backgroundwidth, backgroundheight);//bg
+            drawImg(background, 0, 0, backgroundwidth, backgroundheight); //bg
             drawImg(ship, PlayerXpos, PlayerYpos, 60, 90); //player
-            drawImg(enemysprite, 0 ,0,0 ,0);//enemy
-//            drawImg(pickupSprite,100,100,50,50);//healthpickup
+            drawImg(bullet, bulletXpos, bulletYpos, BULLET_WIDTH, BULLET_HEIGHT, 'red')
+            //            drawImg(enemysprite, 0 ,0,0 ,0);//enemy
+            //            drawImg(pickupSprite,100,100,50,50);//healthpickup
             pickUpGen();
             DrawPickups();
-            
+
             if (settingUp) {
                 for (var i = 0; i < totalEnemys; i++) {
                     setUp();
@@ -242,7 +300,9 @@
             PlayerMove();
             DrawEnemys();
             moveEnemys();
-        }
+            bulletShoot();
+
+        } // end func
 
 
         function colorRect(x, y, w, h, c) {
