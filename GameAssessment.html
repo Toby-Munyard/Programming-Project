@@ -12,7 +12,7 @@
             document.addEventListener('keydown', KeyPressed);
             document.addEventListener('keyup', KeyReleased);
 
-            setInterval(mainloop, 1000 / gameSpeed);
+            setInterval(mainloop, 1000 / 50);
         }
 
         //player vars
@@ -76,23 +76,16 @@
             userName = prompt('what is your name?');
         }
         
-        var difficulty = prompt('how hard do you want it? (type 1-10 1 is easiest 10 is hardest)','easy');
+        var difficulty = prompt('how hard do you want it? easy, medium or hard?','easy');
         
         difficulty = Number(difficulty) // makes a number
         var gameSpeed = 0;
-        
-        if(difficulty == easy){
-            gameSpeed = 20
-        }
-        if(difficulty == medium){
-            gameSpeed = 60
-        }
-        if(difficulty == hard){
-            gameSpeed = 80
-        }
-        else {
-            gameSpeed = 60;
-        }
+//        
+//        if(difficulty == easy){
+//            gameSpeed = 2;
+//        }else {
+//            gameSpeed = 30;
+//        }
         function KeyPressed(evt) {
             if (evt.keyCode == LEFT_KEY) { //left
                 leftKeyPressed = true;
@@ -109,7 +102,7 @@
             if (evt.keyCode == SPACE_KEY) { // space
                 shooting = true;
             }
-        } // end func
+        } // end func Controls
 
         function KeyReleased(evt) {
             if (evt.keyCode == LEFT_KEY) { //left
@@ -124,7 +117,7 @@
             if (evt.keyCode == DOWN_KEY) { // down
                 downKeyPressed = false;
             }
-        } // end func
+        } // end func Controls
 
         var shooting = false;
         var shot = false;
@@ -138,8 +131,15 @@
             if (shooting && shot) {
                 bulletYpos -= bulletYspeed;
             }
-            
-        }// end func
+//            if (bulletYpos < 0 || bulletXpos + BULLET_WIDTH > Enemys.EnemyXpos && bulletXpos < Enemys.EnemyXpos + Enemys.EnemySize && bulletYpos + BULLET_HEIGHT > Enemys.EnemyYpos && bulletYpos < Enemys.EnemyYpos + Enemys.EnemySize) {
+//                shot = false;
+//                shooting = false;
+//            }
+            if (shot == false && shooting == false) {
+                bulletXpos = 0 - BULLET_WIDTH;
+                bulletYpos = 0;
+            }
+        }// end func 
 
         function PlayerMove() {
             if (rightKeyPressed) {
@@ -268,15 +268,12 @@
                     Health--;
                     console.log('Health:' + Health);
                 }
-                
-                if (bulletYpos < 0 || bulletXpos + BULLET_WIDTH > Enemys.EnemyXpos && bulletXpos < Enemys.EnemyXpos + Enemys.EnemySize && bulletYpos + BULLET_HEIGHT > Enemys.EnemyYpos && bulletYpos < Enemys.EnemyYpos + Enemys.EnemySize) {
+                 if (bulletYpos < 0 || bulletXpos + BULLET_WIDTH > Enemy.EnemyXpos && bulletXpos < Enemy.EnemyXpos + Enemy.EnemySize && bulletYpos + BULLET_HEIGHT > Enemy.EnemyYpos && bulletYpos < Enemy.EnemyYpos + Enemy.EnemySize) {
+                     Enemy.EnemyYpos = 0;
                 shot = false;
                 shooting = false;
             }
-            if (shot == false && shooting == false) {
-                bulletXpos = 0 - BULLET_WIDTH;
-                bulletYpos = 0;
-            }
+                
             });
         } //end func
 
