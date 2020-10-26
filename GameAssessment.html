@@ -76,15 +76,22 @@
             userName = prompt('what is your name?');
         }
         
-        var difficulty = prompt('how hard do you want it?','easy');
+        var difficulty = prompt('how hard do you want it? (type 1-10 1 is easiest 10 is hardest)','easy');
         
         difficulty = Number(difficulty) // makes a number
         var gameSpeed = 0;
         
-        if(difficulty == 1){
-            gameSpeed = 2
-        } else {
-            gameSpeed = 30;
+        if(difficulty == easy){
+            gameSpeed = 20
+        }
+        if(difficulty == medium){
+            gameSpeed = 60
+        }
+        if(difficulty == hard){
+            gameSpeed = 80
+        }
+        else {
+            gameSpeed = 60;
         }
         function KeyPressed(evt) {
             if (evt.keyCode == LEFT_KEY) { //left
