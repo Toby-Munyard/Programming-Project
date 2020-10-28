@@ -12,7 +12,7 @@
             document.addEventListener('keydown', KeyPressed);
             document.addEventListener('keyup', KeyReleased);
 
-            setInterval(mainloop, 1000 / 50);
+            setInterval(mainloop, 1000 / gameSpeed);
         }
 
         //player vars
@@ -28,7 +28,9 @@
         var backgroundheight = 800;
         var backgroundwidth = 1000;
         var background = new Image();
+        var Endgame = new Image();
         background.src = 'images/Background.jpg';
+        Endgame.src = 'images/Endgame.jpg'
 
         //control vars
         var leftKeyPressed = false;
@@ -71,21 +73,21 @@
         bullet.src = 'images/bullet.png';
 
         var userName = '';
-        
-        while(userName == '' || userName == null){
+
+        while (userName == '' || userName == null) {
             userName = prompt('what is your name?');
         }
-        
-        var difficulty = prompt('how hard do you want it? easy, medium or hard?','easy');
-        
+
+        var difficulty = prompt('how hard do you want it? easy, medium or hard?', 'easy');
+
         difficulty = Number(difficulty) // makes a number
-        var gameSpeed = 0;
-//        
-//        if(difficulty == easy){
-//            gameSpeed = 2;
-//        }else {
-//            gameSpeed = 30;
-//        }
+        var gameSpeed = 30;
+                
+                if(difficulty == easy){
+                    gameSpeed == 30;
+                }else {
+                    gameSpeed = 100;
+                }
         function KeyPressed(evt) {
             if (evt.keyCode == LEFT_KEY) { //left
                 leftKeyPressed = true;
@@ -131,15 +133,15 @@
             if (shooting && shot) {
                 bulletYpos -= bulletYspeed;
             }
-//            if (bulletYpos < 0 || bulletXpos + BULLET_WIDTH > Enemys.EnemyXpos && bulletXpos < Enemys.EnemyXpos + Enemys.EnemySize && bulletYpos + BULLET_HEIGHT > Enemys.EnemyYpos && bulletYpos < Enemys.EnemyYpos + Enemys.EnemySize) {
-//                shot = false;
-//                shooting = false;
-//            }
+            //            if (bulletYpos < 0 || bulletXpos + BULLET_WIDTH > Enemys.EnemyXpos && bulletXpos < Enemys.EnemyXpos + Enemys.EnemySize && bulletYpos + BULLET_HEIGHT > Enemys.EnemyYpos && bulletYpos < Enemys.EnemyYpos + Enemys.EnemySize) {
+            //                shot = false;
+            //                shooting = false;
+            //            }
             if (shot == false && shooting == false) {
                 bulletXpos = 0 - BULLET_WIDTH;
                 bulletYpos = 0;
             }
-        }// end func 
+        } // end func 
 
         function PlayerMove() {
             if (rightKeyPressed) {
@@ -268,12 +270,14 @@
                     Health--;
                     console.log('Health:' + Health);
                 }
-                 if (bulletYpos < 0 || bulletXpos + BULLET_WIDTH > Enemy.EnemyXpos && bulletXpos < Enemy.EnemyXpos + Enemy.EnemySize && bulletYpos + BULLET_HEIGHT > Enemy.EnemyYpos && bulletYpos < Enemy.EnemyYpos + Enemy.EnemySize) {
-                     Enemy.EnemyYpos = 0;
-                shot = false;
-                shooting = false;
-            }
-                
+                if (bulletYpos < 0 || bulletXpos + BULLET_WIDTH > Enemy.EnemyXpos && bulletXpos < Enemy.EnemyXpos + Enemy.EnemySize && bulletYpos + BULLET_HEIGHT > Enemy.EnemyYpos && bulletYpos < Enemy.EnemyYpos + Enemy.EnemySize) {
+                    Enemy.EnemyYpos = 0;
+                    Kills++;
+                    console.log('Kills:' + Kills)
+                    shot = false;
+                    shooting = false;
+                }
+
             });
         } //end func
 
@@ -283,13 +287,21 @@
 
         function GameOver() {
             if (Health < 1) {
-                PlayerXpos = 400;
+                ;
             }
+            if (Kills > 10) {
+                gameSpeed + 10;
+            }
+            if (Kills > 20) {
+                gameSpeed + 20;
+            }
+
         } // end func
         function mainloop() {
+            drawImg(Endgame, 0, 0, backgroundwidth, backgroundheight); //endgame
             drawImg(background, 0, 0, backgroundwidth, backgroundheight); //bg
             drawImg(ship, PlayerXpos, PlayerYpos, 60, 90); //player
-            drawImg(bullet, bulletXpos, bulletYpos, BULLET_WIDTH, BULLET_HEIGHT, 'red')
+            drawImg(bullet, bulletXpos, bulletYpos, BULLET_WIDTH, BULLET_HEIGHT, 'red') //bullet
             //            drawImg(enemysprite, 0 ,0,0 ,0);//enemy
             //            drawImg(pickupSprite,100,100,50,50);//healthpickup
             pickUpGen();
