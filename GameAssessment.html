@@ -1,7 +1,7 @@
 <!doctype html>
 
 <body>
-    <canvas id="gameCanvas" width="1000" height="800"></canvas>
+    <canvas id="gameCanvas" width="1000" height="700"></canvas>
     <script>
         var canvas, canvasContext;
 
@@ -12,7 +12,7 @@
             document.addEventListener('keydown', KeyPressed);
             document.addEventListener('keyup', KeyReleased);
 
-            setInterval(mainloop, 1000 / gameSpeed);
+            setInterval(mainloop, 1000 / 50);
         }
 
         //player vars
@@ -30,7 +30,7 @@
         var background = new Image();
         var Endgame = new Image();
         background.src = 'images/Background.jpg';
-        Endgame.src = 'images/Endgame.jpg'
+        Endgame.src = 'images/GameOver.jpg'
 
         //control vars
         var leftKeyPressed = false;
@@ -71,6 +71,9 @@
         var bulletYspeed = 10;
         var bullet = new Image();
         bullet.src = 'images/bullet.png';
+        
+        //Endgame vars
+        var gameRun = true;
 
         var userName = '';
 
@@ -78,16 +81,35 @@
             userName = prompt('what is your name?');
         }
 
-        var difficulty = prompt('how hard do you want it? easy, medium or hard?', 'easy');
+        var difficulty = 'easy';
+        
+//        while(difficulty != 'easy' || difficulty != 'hard'){
+          difficulty = prompt('how hard do you want it? easy, medium or hard?', 'easy');
+//        }
 
-        difficulty = Number(difficulty) // makes a number
-        var gameSpeed = 30;
-                
-                if(difficulty == easy){
-                    gameSpeed == 30;
-                }else {
-                    gameSpeed = 100;
+//        difficulty = Number(difficulty) // makes a number
+        var gameSpeed = 0;
+        var max = 0;
+        var min = 0;
+                if(difficulty == 'easy'){
+                    min == 5;
+                    max == 10;
+                    console.log(gameSpeed)
                 }
+        if(difficulty == 'medium'){
+            min == 10;        
+            max == 20;
+                    console.log(gameSpeed)
+                }
+        if(difficulty == 'hard'){
+            min == 100;        
+            max == 1000;
+                    console.log(gameSpeed)
+                }
+            else {
+                min == 10;    
+                max == 20;
+            }
         function KeyPressed(evt) {
             if (evt.keyCode == LEFT_KEY) { //left
                 leftKeyPressed = true;
@@ -174,8 +196,8 @@
             var EnemySize = Math.floor(Math.random() * (100 - 10)) + 10;
             var EnemyXpos = Math.floor(Math.random() * ((canvas.width - EnemySize) - 0)) + 0;
             var EnemyYpos = Math.floor(Math.random() * ((canvas.height - EnemySize) - 0)) + 0;
-            var EnemyYspeed = Math.floor(Math.random() * (10 - 1)) + 1;
-            var EnemyXspeed = Math.floor(Math.random() * (10 - 1)) + 1;
+            var EnemyYspeed = Math.floor(Math.random() * (max - min)) + min;
+            var EnemyXspeed = Math.floor(Math.random() * (max - min)) + min;
 
             var Enemy = {
                 EnemyXpos: EnemyXpos,
@@ -287,18 +309,18 @@
 
         function GameOver() {
             if (Health < 1) {
-                ;
+                gameRun = false;
             }
             if (Kills > 10) {
-                gameSpeed + 10;
+                max + 10;
             }
             if (Kills > 20) {
-                gameSpeed + 20;
+                max + 20;
             }
 
         } // end func
         function mainloop() {
-            drawImg(Endgame, 0, 0, backgroundwidth, backgroundheight); //endgame
+            if(gameRun){
             drawImg(background, 0, 0, backgroundwidth, backgroundheight); //bg
             drawImg(ship, PlayerXpos, PlayerYpos, 60, 90); //player
             drawImg(bullet, bulletXpos, bulletYpos, BULLET_WIDTH, BULLET_HEIGHT, 'red') //bullet
@@ -317,14 +339,28 @@
             DrawEnemys();
             moveEnemys();
             bulletShoot();
-
-        } // end func
+            GameOver();
+            colorText('Arrow Keys to move | Space to attack',50,50,'20px Arial','Green')
+            }
+            else {
+                colorRect(Endgame, 0, 0, backgroundwidth, backgroundheight); //endgame
+                colorText('Game Over!',50,50,'20px Arial','Red')
+                colorText(userName + ' your score was ' + Kills,50,100,'20px Arial','Red')
+                colorText('Hit the reload page button in the top left to try again!',50,150,'20px Arial','Red')
+            }
+        } // end func everything the game needs to run is in here, don't delete it
 
 
         function colorRect(x, y, w, h, c) {
             canvasContext.fillStyle = c;
             canvasContext.fillRect(x, y, w, h);
-        } // end func 
+        } // end func canvas background
 
+        function colorText(msg,x,y,f,c){
+            canvasContext.fillStyle = c;
+            canvasContext.font = f;
+            canvasContext.fillText(msg,x,y);
+        } // end func Gameover text
+        
     </script>
 </body>
