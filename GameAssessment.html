@@ -71,7 +71,7 @@
         var bulletYspeed = 10;
         var bullet = new Image();
         bullet.src = 'images/bullet.png';
-        
+
         //Endgame vars
         var gameRun = true;
 
@@ -82,34 +82,35 @@
         }
 
         var difficulty = 'easy';
-        
-//        while(difficulty != 'easy' || difficulty != 'hard'){
-          difficulty = prompt('how hard do you want it? easy, medium or hard?', 'easy');
-//        }
-
-//        difficulty = Number(difficulty) // makes a number
-        var gameSpeed = 0;
-        var max = 0;
-        var min = 0;
-                if(difficulty == 'easy'){
-                    min == 5;
-                    max == 10;
-                    console.log(gameSpeed)
-                }
-        if(difficulty == 'medium'){
-            min == 10;        
-            max == 20;
-                    console.log(gameSpeed)
-                }
-        if(difficulty == 'hard'){
-            min == 100;        
-            max == 1000;
-                    console.log(gameSpeed)
-                }
-            else {
-                min == 10;    
-                max == 20;
+        var pass = false;
+        while(pass == false){
+            difficulty = prompt('how hard do you want it? easy, medium or hard?', 'easy');
+            if(difficulty == 'easy' || difficulty == 'medium' || difficulty == 'hard'){
+                pass = true;
             }
+        
+        }
+
+        //        difficulty = Number(difficulty) // makes a number
+        var gameSpeed = 0;
+        var max = 4;
+        var min = 2;
+        if (difficulty == 'easy') {
+            min = 5;
+            max = 10;
+            console.log(max)
+        }
+        if (difficulty == 'medium') {
+            min = 10;
+            max = 20;
+            console.log(max)
+        }
+        if (difficulty == 'hard') {
+            min = 50;
+            max = 100;
+            console.log(max)
+        } 
+
         function KeyPressed(evt) {
             if (evt.keyCode == LEFT_KEY) { //left
                 leftKeyPressed = true;
@@ -320,33 +321,34 @@
 
         } // end func
         function mainloop() {
-            if(gameRun){
-            drawImg(background, 0, 0, backgroundwidth, backgroundheight); //bg
-            drawImg(ship, PlayerXpos, PlayerYpos, 60, 90); //player
-            drawImg(bullet, bulletXpos, bulletYpos, BULLET_WIDTH, BULLET_HEIGHT, 'red') //bullet
-            //            drawImg(enemysprite, 0 ,0,0 ,0);//enemy
-            //            drawImg(pickupSprite,100,100,50,50);//healthpickup
-            pickUpGen();
-            DrawPickups();
+            if (gameRun) {
+                drawImg(background, 0, 0, backgroundwidth, backgroundheight); //bg
+                drawImg(ship, PlayerXpos, PlayerYpos, 60, 90); //player
+                drawImg(bullet, bulletXpos, bulletYpos, BULLET_WIDTH, BULLET_HEIGHT, 'red') //bullet
+                //            drawImg(enemysprite, 0 ,0,0 ,0);//enemy
+                //            drawImg(pickupSprite,100,100,50,50);//healthpickup
+                pickUpGen();
+                DrawPickups();
 
-            if (settingUp) {
-                for (var i = 0; i < totalEnemys; i++) {
-                    setUp();
+                if (settingUp) {
+                    for (var i = 0; i < totalEnemys; i++) {
+                        setUp();
+                    }
+                    settingUp = false;
                 }
-                settingUp = false;
-            }
-            PlayerMove();
-            DrawEnemys();
-            moveEnemys();
-            bulletShoot();
-            GameOver();
-            colorText('Arrow Keys to move | Space to attack',50,50,'20px Arial','Green')
-            }
-            else {
-                colorRect(Endgame, 0, 0, backgroundwidth, backgroundheight); //endgame
-                colorText('Game Over!',50,50,'20px Arial','Red')
-                colorText(userName + ' your score was ' + Kills,50,100,'20px Arial','Red')
-                colorText('Hit the reload page button in the top left to try again!',50,150,'20px Arial','Red')
+                PlayerMove();
+                DrawEnemys();
+                moveEnemys();
+                bulletShoot();
+                GameOver();
+                colorText('Arrow Keys to move | Space to attack', 50, 50, '20px Arial', 'Lime')
+                colorText(userName + "'s score is " + Kills, 50, 100, '20px Arial', 'Lime')
+                colorText(userName + "'s health is " + Health, 50, 150, '20px Arial', 'Lime')
+            } else {
+                drawImg(Endgame, 0, 0, backgroundwidth, backgroundheight); //endgame
+                colorText('Game Over!', 50, 50, '20px Arial', 'Red')
+                colorText(userName + ' your score was ' + Kills, 50, 100, '20px Arial', 'Red')
+                colorText('Hit the reload page button in the top left to try again!', 50, 150, '20px Arial', 'Red')
             }
         } // end func everything the game needs to run is in here, don't delete it
 
@@ -356,11 +358,11 @@
             canvasContext.fillRect(x, y, w, h);
         } // end func canvas background
 
-        function colorText(msg,x,y,f,c){
+        function colorText(msg, x, y, f, c) {
             canvasContext.fillStyle = c;
             canvasContext.font = f;
-            canvasContext.fillText(msg,x,y);
+            canvasContext.fillText(msg, x, y);
         } // end func Gameover text
-        
+
     </script>
 </body>
