@@ -99,18 +99,21 @@
             min = 5;
             max = 10;
             setInterval(mainloop, 1000 / 5);
+//            totalEnemys = 10;
             console.log(max)
         }
         if (difficulty == 'medium') {
             min = 10;
             max = 20;
             setInterval(mainloop, 1000 / 15);
+//            totalEnemys = 15;
             console.log(max)
         }
         if (difficulty == 'hard') {
             min = 50;
             max = 100;
-            setInterval(mainloop, 1000 / 25);
+            setInterval(mainloop, 1000 / 20);
+//            totalEnemys = 20;
             console.log(max)
         } 
 
@@ -166,9 +169,6 @@
             if (shot == false && shooting == false) {
                 bulletXpos = 0 - BULLET_WIDTH;
                 bulletYpos = 0;
-            }
-            if (bulletYpos > canvas.height) {
-                bulletYpos - BULLET_HEIGHT;
             }
         } // end func 
 
@@ -299,13 +299,18 @@
                     Health--;
                     console.log('Health:' + Health);
                 }
-                if (bulletYpos < 0 || bulletXpos + BULLET_WIDTH > Enemy.EnemyXpos && bulletXpos < Enemy.EnemyXpos + Enemy.EnemySize && bulletYpos + BULLET_HEIGHT > Enemy.EnemyYpos && bulletYpos < Enemy.EnemyYpos + Enemy.EnemySize) {
+                if (bulletXpos + BULLET_WIDTH > Enemy.EnemyXpos && bulletXpos < Enemy.EnemyXpos + Enemy.EnemySize && bulletYpos + BULLET_HEIGHT > Enemy.EnemyYpos && bulletYpos < Enemy.EnemyYpos + Enemy.EnemySize) {
                     Enemy.EnemyYpos = 0;
                     Kills++;
                     console.log('Kills:' + Kills)
                     shot = false;
                     shooting = false;
                 }
+                 if (bulletYpos = 0) {
+                    shot = false;
+                    shooting = false; 
+            }
+            
 
             });
         } //end func
