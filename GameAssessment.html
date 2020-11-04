@@ -98,16 +98,19 @@
         if (difficulty == 'easy') {
             min = 5;
             max = 10;
+            setInterval(mainloop, 1000 / 5);
             console.log(max)
         }
         if (difficulty == 'medium') {
             min = 10;
             max = 20;
+            setInterval(mainloop, 1000 / 15);
             console.log(max)
         }
         if (difficulty == 'hard') {
             min = 50;
             max = 100;
+            setInterval(mainloop, 1000 / 25);
             console.log(max)
         } 
 
@@ -163,6 +166,9 @@
             if (shot == false && shooting == false) {
                 bulletXpos = 0 - BULLET_WIDTH;
                 bulletYpos = 0;
+            }
+            if (bulletYpos > canvas.height) {
+                bulletYpos - BULLET_HEIGHT;
             }
         } // end func 
 
