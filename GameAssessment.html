@@ -83,12 +83,12 @@
 
         var difficulty = 'easy';
         var pass = false;
-        while(pass == false){
+        while (pass == false) {
             difficulty = prompt('how hard do you want it? easy, medium or hard?', 'easy');
-            if(difficulty == 'easy' || difficulty == 'medium' || difficulty == 'hard'){
+            if (difficulty == 'easy' || difficulty == 'medium' || difficulty == 'hard') {
                 pass = true;
             }
-        
+
         }
 
         //        difficulty = Number(difficulty) // makes a number
@@ -99,20 +99,23 @@
             min = 5;
             max = 10;
             setInterval(mainloop, 1000 / 5);
+            totalEnemys = 10;
             console.log(max)
         }
         if (difficulty == 'medium') {
             min = 10;
             max = 20;
             setInterval(mainloop, 1000 / 15);
+            totalEnemys = 14;
             console.log(max)
         }
         if (difficulty == 'hard') {
             min = 50;
             max = 100;
-            setInterval(mainloop, 1000 / 25);
+            setInterval(mainloop, 1000 / 20);
+            totalEnemys = 16;
             console.log(max)
-        } 
+        } // These ifs control the difficulty, the framerate and number of enemies will increase with the difficulty 
 
         function KeyPressed(evt) {
             if (evt.keyCode == LEFT_KEY) { //left
@@ -130,7 +133,7 @@
             if (evt.keyCode == SPACE_KEY) { // space
                 shooting = true;
             }
-        } // end func Controls
+        } // end func Controls for player
 
         function KeyReleased(evt) {
             if (evt.keyCode == LEFT_KEY) { //left
@@ -145,7 +148,7 @@
             if (evt.keyCode == DOWN_KEY) { // down
                 downKeyPressed = false;
             }
-        } // end func Controls
+        } // end func Controls for player
 
         var shooting = false;
         var shot = false;
@@ -167,10 +170,7 @@
                 bulletXpos = 0 - BULLET_WIDTH;
                 bulletYpos = 0;
             }
-            if (bulletYpos > canvas.height) {
-                bulletYpos - BULLET_HEIGHT;
-            }
-        } // end func 
+        } // end func this code keeps the bullet with the player if it has not been shot
 
         function PlayerMove() {
             if (rightKeyPressed) {
@@ -197,7 +197,7 @@
                     PlayerYpos = 0;
                 }
             }
-        } // end func
+        } // end func this is the teleport that kicks in when the player goes offscreen
 
         function setUp() {
             var EnemySize = Math.floor(Math.random() * (100 - 10)) + 10;
@@ -216,7 +216,7 @@
 
             Enemys.push(Enemy);
 
-        } // end func
+        } // end func this is how enemies spawn and controls the random sizes and positions 
 
         function createPickUp() {
             var PickupSize = Math.floor(Math.random() * (100 - 10)) + 10;
@@ -231,7 +231,7 @@
 
             pickups.push(p);
 
-        } //end func
+        } //end func this is how the health pickups get different sizes and positions on the canvas
 
         var counter = 0;
         var randTime = Math.floor(Math.random() * 100);
@@ -245,7 +245,7 @@
                 counter = 0;
                 console.log('health')
             }
-        } // end func
+        } // end func this controls how often the pickups spawn
 
         function DrawPickups() {
             pickups.forEach(function(health, i) {
@@ -257,7 +257,8 @@
                     Health++;
                 }
             });
-        }; // end func
+        }; // end func this is how the players health increases when picking up a heart
+
         function DrawEnemys() {
             Enemys.forEach(function(Enemy, i) {
                 drawImg(enemysprite, Enemy.EnemyXpos, Enemy.EnemyYpos, Enemy.EnemySize, Enemy.EnemySize);
@@ -299,13 +300,18 @@
                     Health--;
                     console.log('Health:' + Health);
                 }
-                if (bulletYpos < 0 || bulletXpos + BULLET_WIDTH > Enemy.EnemyXpos && bulletXpos < Enemy.EnemyXpos + Enemy.EnemySize && bulletYpos + BULLET_HEIGHT > Enemy.EnemyYpos && bulletYpos < Enemy.EnemyYpos + Enemy.EnemySize) {
+                if (bulletXpos + BULLET_WIDTH > Enemy.EnemyXpos && bulletXpos < Enemy.EnemyXpos + Enemy.EnemySize && bulletYpos + BULLET_HEIGHT > Enemy.EnemyYpos && bulletYpos < Enemy.EnemyYpos + Enemy.EnemySize) {
                     Enemy.EnemyYpos = 0;
                     Kills++;
                     console.log('Kills:' + Kills)
                     shot = false;
                     shooting = false;
                 }
+                if (bulletYpos < 0) {
+                    shot = false;
+                    shooting = false;
+                }
+
 
             });
         } //end func
