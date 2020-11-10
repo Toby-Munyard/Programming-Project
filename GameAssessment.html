@@ -54,12 +54,12 @@
         //health
         var pickups = [];
         var settingup = true;
-        var totalpickup = 2;
+        var totalpickup = 1;
         var pickupSprite = new Image();
         pickupSprite.src = 'images/pickup.png';
 
         //scoring vars
-        var Health = 5;
+        var Health = 3;
         var Kills = 0;
         var Timer = 60;
 
@@ -79,7 +79,7 @@
 
         while (userName == '' || userName == null) {
             userName = prompt('what is your name?');
-        }
+        } //creates a prompt when game is launched asking the player's name and will not go away until something is entered
 
         var difficulty = 'easy';
         var pass = false;
@@ -89,7 +89,7 @@
                 pass = true;
             }
 
-        }
+        } //creates a prompt that asks the player what difficulty they want, it defaults to easy when opened and only accepts easy, medium or hard, anything else causes a reprompt
 
         //        difficulty = Number(difficulty) // makes a number
         var gameSpeed = 0;
@@ -133,7 +133,7 @@
             if (evt.keyCode == SPACE_KEY) { // space
                 shooting = true;
             }
-        } // end func Controls for player
+        } // end func Controls for player this makes it so when a key is pressed it performs the key that is assigned to each for example SPACE_KEY is assigned to key 32 which is the space bar
 
         function KeyReleased(evt) {
             if (evt.keyCode == LEFT_KEY) { //left
@@ -148,7 +148,7 @@
             if (evt.keyCode == DOWN_KEY) { // down
                 downKeyPressed = false;
             }
-        } // end func Controls for player
+        } // end func Controls for player this makes it so when a key is no longer pressed the command is stopped until the key is pressed again
 
         var shooting = false;
         var shot = false;
@@ -162,10 +162,7 @@
             if (shooting && shot) {
                 bulletYpos -= bulletYspeed;
             }
-            //            if (bulletYpos < 0 || bulletXpos + BULLET_WIDTH > Enemys.EnemyXpos && bulletXpos < Enemys.EnemyXpos + Enemys.EnemySize && bulletYpos + BULLET_HEIGHT > Enemys.EnemyYpos && bulletYpos < Enemys.EnemyYpos + Enemys.EnemySize) {
-            //                shot = false;
-            //                shooting = false;
-            //            }
+            
             if (shot == false && shooting == false) {
                 bulletXpos = 0 - BULLET_WIDTH;
                 bulletYpos = 0;
@@ -197,7 +194,7 @@
                     PlayerYpos = 0;
                 }
             }
-        } // end func this is the teleport that kicks in when the player goes offscreen
+        } // end func this is the teleport that kicks in when the player goes offscreen in any direction
 
         function setUp() {
             var EnemySize = Math.floor(Math.random() * (100 - 10)) + 10;
@@ -205,6 +202,7 @@
             var EnemyYpos = Math.floor(Math.random() * ((canvas.height - EnemySize) - 0)) + 0;
             var EnemyYspeed = Math.floor(Math.random() * (max - min)) + min;
             var EnemyXspeed = Math.floor(Math.random() * (max - min)) + min;
+            // this randomly spawns an enemy with random size and speed at a random spot on the top of the canvas
 
             var Enemy = {
                 EnemyXpos: EnemyXpos,
@@ -212,7 +210,7 @@
                 EnemySize: EnemySize,
                 EnemyXspeed: EnemyXspeed,
                 EnemyYspeed: EnemyYspeed,
-            }
+            } // variables for enemies
 
             Enemys.push(Enemy);
 
@@ -222,12 +220,13 @@
             var PickupSize = Math.floor(Math.random() * (100 - 10)) + 10;
             var PickupXpos = Math.floor(Math.random() * ((canvas.width - PickupSize) - 0)) + 0;
             var PickupYpos = Math.floor(Math.random() * ((canvas.height - PickupSize) - 0)) + 0;
+            // this randomly spawns health pickups at random intervals that are random sizes across the canvas in random places, this encourages the player to move around
 
             var p = {
                 PickupXpos: PickupXpos,
                 PickupYpos: PickupYpos,
                 PickupSize: PickupSize,
-            }
+            } // health pickup variables
 
             pickups.push(p);
 
@@ -238,7 +237,7 @@
 
         function pickUpGen() {
             counter++;
-
+            
             if (counter == randTime) {
                 createPickUp();
                 randTime = Math.floor(Math.random() * 100);
@@ -257,17 +256,17 @@
                     Health++;
                 }
             });
-        }; // end func this is how the players health increases when picking up a heart
+        }; // end func this detects when a player is touching a pickup and is how the players health increases when picking up a heart
 
         function DrawEnemys() {
             Enemys.forEach(function(Enemy, i) {
                 drawImg(enemysprite, Enemy.EnemyXpos, Enemy.EnemyYpos, Enemy.EnemySize, Enemy.EnemySize);
             });
-        }; // end func
+        }; // end func this is how the enemies have a sprite over then and where they are spawned from
 
         function EnemyRandomSpawns() {
             math.random() * canvas.width
-        }; // end func
+        }; // end func how enemies spawn randomly across the top of canvas
 
         function moveEnemys() {
             Enemys.forEach(function(Enemy, i) {
@@ -290,8 +289,8 @@
                     Enemy.EnemySize = Math.floor(Math.random() * (80 - 10)) + 10;
                     Enemy.EnemyYspeed = Math.floor(Math.random() * (10 - 1)) + 1;
                     Enemy.EnemyXspeed = Math.floor(Math.random() * (10 - 1)) + 1;
-
                 }
+                
                 if (Enemy.EnemyYpos + Enemy.EnemySize > PlayerYpos && Enemy.EnemyYpos < PlayerYpos + PLAYER_SIZE && Enemy.EnemyXpos + Enemy.EnemySize > PlayerXpos && Enemy.EnemyXpos < PlayerXpos + PLAYER_SIZE) {
                     Enemy.EnemyXpos = 0;
                     Enemy.EnemyYpos = 0;
@@ -299,14 +298,15 @@
                     PlayerYpos = canvas.height * .8;
                     Health--;
                     console.log('Health:' + Health);
-                }
+                } // this code finds if the enemies are touching the player then sends the enemies back to the top after they touch the player and removes 1 health from the player
+                
                 if (bulletXpos + BULLET_WIDTH > Enemy.EnemyXpos && bulletXpos < Enemy.EnemyXpos + Enemy.EnemySize && bulletYpos + BULLET_HEIGHT > Enemy.EnemyYpos && bulletYpos < Enemy.EnemyYpos + Enemy.EnemySize) {
                     Enemy.EnemyYpos = 0;
                     Kills++;
                     console.log('Kills:' + Kills)
                     shot = false;
                     shooting = false;
-                }
+                } // this code sends the enemies back to the top of the screen when they touch a bullet and adds 1 point to the kills score
                 if (bulletYpos < 0) {
                     shot = false;
                     shooting = false;
@@ -314,11 +314,11 @@
 
 
             });
-        } //end func
+        } //end func this is the movement and bouncing for enemies, the collision between bullets and enemies and the adding to score if the bullet is touching a enemy
 
         function drawImg(src, x, y, w, h) {
             canvasContext.drawImage(src, x, y, w, h);
-        } // end func
+        } // end func this is how images are imported
 
         function GameOver() {
             if (Health < 1) {
@@ -331,7 +331,7 @@
                 max + 20;
             }
 
-        } // end func
+        } // end func this stops the game
         function mainloop() {
             if (gameRun) {
                 drawImg(background, 0, 0, backgroundwidth, backgroundheight); //bg
@@ -362,7 +362,7 @@
                 colorText(userName + ' your score was ' + Kills, 50, 100, '20px Arial', 'Red')
                 colorText('Hit the reload page button in the top left to try again!', 50, 150, '20px Arial', 'Red')
             }
-        } // end func everything the game needs to run is in here, don't delete it
+        } // end func everything the game needs to run is in here, don't delete it, most new functions must be put inside the mainloop for them to function
 
 
         function colorRect(x, y, w, h, c) {
