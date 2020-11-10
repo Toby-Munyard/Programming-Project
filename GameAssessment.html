@@ -289,7 +289,7 @@
                     Enemy.EnemySize = Math.floor(Math.random() * (80 - 10)) + 10;
                     Enemy.EnemyYspeed = Math.floor(Math.random() * (10 - 1)) + 1;
                     Enemy.EnemyXspeed = Math.floor(Math.random() * (10 - 1)) + 1;
-                }
+                }// enemy respawn and boundary
                 
                 if (Enemy.EnemyYpos + Enemy.EnemySize > PlayerYpos && Enemy.EnemyYpos < PlayerYpos + PLAYER_SIZE && Enemy.EnemyXpos + Enemy.EnemySize > PlayerXpos && Enemy.EnemyXpos < PlayerXpos + PLAYER_SIZE) {
                     Enemy.EnemyXpos = 0;
